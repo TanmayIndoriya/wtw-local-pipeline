@@ -1,0 +1,12 @@
+spark:
+  app_name: DataPlatform
+
+  master: local[*]
+
+  shuffle_partitions: 8
+
+  parquet_compression: snappy
+
+  adaptive_query_execution: true
+
+  log_level: WARN

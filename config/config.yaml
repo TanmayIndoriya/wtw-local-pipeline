@@ -1,0 +1,12 @@
+project:
+  name: data-platform
+  environment: local
+
+storage:
+  landing: storage/landing
+  bronze: storage/bronze
+  silver: storage/silver
+  gold: storage/gold
+
+  checkpoints: storage/checkpoints
+  quarantine: storage/quarantine
