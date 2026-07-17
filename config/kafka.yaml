@@ -1,0 +1,13 @@
+kafka:
+  bootstrap_servers:
+    - localhost:9092
+
+  consumer_group: data-platform
+
+  auto_offset_reset: earliest
+
+  topics:
+    customers: customers
+    products: products
+    orders: orders
+    payments: payments
