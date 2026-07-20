@@ -1,7 +1,7 @@
 import logging
 import logging.config
 
-from config import get_config
+from common.config import get_config
 
 _is_configured = False
 
