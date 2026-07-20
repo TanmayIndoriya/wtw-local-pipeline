@@ -2,7 +2,7 @@ from pathlib import Path
 import shutil
 from typing import List
 
-from config import get_config
+from common.config import get_config
 
 
 _config = get_config()

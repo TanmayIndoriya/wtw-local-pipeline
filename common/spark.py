@@ -1,7 +1,7 @@
 from pyspark.sql import SparkSession # type: ignore
 from typing import Optional
 
-from config import get_config
+from common.config import get_config
 
 
 _spark: Optional[SparkSession] = None

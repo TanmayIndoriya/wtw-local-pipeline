@@ -4,7 +4,7 @@ mysql:
 
   database: source_db
 
-  username: root
-  password: root
+  username: tanmay
+  password: 26T@nm@y07  
 
   driver: com.mysql.cj.jdbc.Driver
