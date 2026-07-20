@@ -2,6 +2,12 @@ project:
   name: data-platform
   environment: local
 
+data:
+  csv: data/csv
+  mysql_seed: data/mysql_seed
+  kafka: data/kafka
+
+
 storage:
   landing: storage/landing
   bronze: storage/bronze
