@@ -27,6 +27,10 @@ def _create_spark_session() -> SparkSession:
             "spark.sql.adaptive.enabled",
             spark_config["adaptive_query_execution"],
         )
+        .config(
+            "spark.jars.packages",
+            "mysql:mysql-connector-java:8.0.33",
+        )
     )
 
     spark = builder.getOrCreate()

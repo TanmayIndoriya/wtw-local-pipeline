@@ -1,5 +1,9 @@
 from pathlib import Path
-import yaml # type: ignore
+import os
+import yaml
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class ConfigLoader:
 
@@ -19,6 +23,11 @@ class ConfigLoader:
         
         with open(file_path, "r") as file:
             config = yaml.safe_load(file)
+        
+        if filename == "mysql":
+            config["mysql"]["password"] = os.getenv("MYSQL_PASSWORD")
+        elif filename == "postgres":
+            config["postgres"]["password"] = os.getenv("POSTGRES_PASSWORD")
 
         self._cache[filename] = config
 

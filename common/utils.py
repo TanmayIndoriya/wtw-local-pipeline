@@ -10,9 +10,45 @@ from typing import Any, Dict, Iterable, List
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, concat_ws, sha2
 
+from pyspark.sql.types import (
+    StructType,
+    DateType,
+    TimestampType,
+    LongType,
+    DoubleType,
+    IntegerType,
+)
+
+
+def apply_schema(df: DataFrame, schema: StructType) -> DataFrame:
+
+    for field in schema.fields:
+
+        if field.name not in df.columns:
+            continue
+
+        dtype = field.dataType
+
+        if isinstance(dtype, DateType):
+            df = df.withColumn(field.name, col(field.name).cast("date"))
+
+        elif isinstance(dtype, TimestampType):
+            df = df.withColumn(field.name, col(field.name).cast("timestamp"))
+
+        elif isinstance(dtype, LongType):
+            df = df.withColumn(field.name, col(field.name).cast("long"))
+
+        elif isinstance(dtype, DoubleType):
+            df = df.withColumn(field.name, col(field.name).cast("double"))
+
+        elif isinstance(dtype, IntegerType):
+            df = df.withColumn(field.name, col(field.name).cast("int"))
+
+    return df
+
+
 def current_timestamp() -> datetime:
     return datetime.now(timezone.utc)
-
 
 def current_timestamp_str(
     fmt: str = "%Y-%m-%d %H:%M:%S"
