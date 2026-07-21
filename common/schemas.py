@@ -2,11 +2,10 @@ from pyspark.sql.types import (
     StructType,
     StructField,
     StringType,
-    IntegerType,
     DoubleType,
     DateType,
     TimestampType,
-    LongType
+    LongType,
 )
 
 
@@ -25,6 +24,7 @@ def customer_schema() -> StructType:
         StructField("registration_date", DateType(), True),
     ])
 
+
 def policy_schema() -> StructType:
 
     return StructType([
@@ -37,6 +37,7 @@ def policy_schema() -> StructType:
         StructField("status", StringType(), True),
     ])
 
+
 def claim_schema() -> StructType:
 
     return StructType([
@@ -46,6 +47,7 @@ def claim_schema() -> StructType:
         StructField("claim_amount", LongType(), True),
         StructField("claim_status", StringType(), True),
     ])
+
 
 def payment_schema() -> StructType:
 
@@ -57,6 +59,11 @@ def payment_schema() -> StructType:
         StructField("payment_method", StringType(), True),
     ])
 
+
+# -------------------------------
+# Business Schemas
+# -------------------------------
+
 SCHEMAS = {
     "customers": customer_schema(),
     "policies": policy_schema(),
@@ -65,9 +72,48 @@ SCHEMAS = {
 }
 
 
+# -------------------------------
+# Processing Metadata
+# -------------------------------
+
+METADATA_FIELDS = [
+    StructField("_ingestion_timestamp", TimestampType(), False),
+    StructField("_batch_id", StringType(), False),
+    StructField("_source_system", StringType(), False),
+    StructField("_source_file", StringType(), True),
+]
+
+
+# -------------------------------
+# Schema APIs
+# -------------------------------
+
 def get_schema(dataset: str) -> StructType:
 
     try:
         return SCHEMAS[dataset.lower()]
     except KeyError:
         raise ValueError(f"Unsupported dataset: {dataset}")
+
+
+def get_bronze_schema(dataset: str) -> StructType:
+
+    business_schema = get_schema(dataset)
+
+    return StructType(
+        list(business_schema.fields) + METADATA_FIELDS
+    )
+
+
+def get_silver_schema(dataset: str) -> StructType:
+
+    # Currently identical to Bronze.
+    # Can diverge later if Silver adds derived columns.
+    return get_bronze_schema(dataset)
+
+
+def get_gold_schema(dataset: str) -> StructType:
+
+    raise NotImplementedError(
+        "Gold schemas are dataset-specific and will be implemented later."
+    )
