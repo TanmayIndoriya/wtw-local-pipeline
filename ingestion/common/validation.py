@@ -1,30 +1,60 @@
-"""
-Generic ingestion validations.
-"""
-
 from pyspark.sql import DataFrame
+from pyspark.sql.types import StructType
+
+from common.logger import get_logger
+
+logger = get_logger(__name__)
 
 
-def validate_not_empty(df: DataFrame) -> None:
-    """
-    Ensures dataframe is not empty.
-    """
+def validate_not_empty(df: DataFrame):
 
-    if df.rdd.isEmpty():
+    if df.isEmpty():
         raise ValueError("DataFrame is empty.")
 
 
 def validate_schema(
     df: DataFrame,
-    expected_schema,
-) -> None:
-    """
-    Validates dataframe schema.
-    """
+    expected_schema: StructType,
+):
 
-    actual = df.schema
+    actual_fields = {
+        field.name: field.dataType
+        for field in df.schema.fields
+    }
 
-    if actual != expected_schema:
+    missing = []
+    mismatched = []
+
+    for field in expected_schema.fields:
+
+        if field.name not in actual_fields:
+            missing.append(field.name)
+            continue
+
+        if actual_fields[field.name] != field.dataType:
+            mismatched.append(
+                (
+                    field.name,
+                    field.dataType,
+                    actual_fields[field.name],
+                )
+            )
+
+    if missing:
+
         raise ValueError(
-            f"Schema mismatch.\nExpected:\n{expected_schema}\n\nActual:\n{actual}"
+            f"Missing columns: {missing}"
         )
+
+    if mismatched:
+
+        errors = "\n".join(
+            f"{name}: expected {expected}, got {actual}"
+            for name, expected, actual in mismatched
+        )
+
+        raise ValueError(
+            f"Schema type mismatch:\n{errors}"
+        )
+
+    logger.info("Schema validation passed.")

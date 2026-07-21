@@ -13,22 +13,14 @@ class MySQLExtractor:
         self.spark = get_spark()
         self.config = get_config().get_mysql()["mysql"]
 
-    def extract(
-        self,
-        table: str,
-    ) -> DataFrame:
-        """
-        Reads a MySQL table into a Spark DataFrame.
-        """
-
-        logger.info("Reading MySQL table: %s", table)
+    def extract(self, table: str) -> DataFrame:
 
         jdbc_url = (
             f"jdbc:mysql://{self.config['host']}:{self.config['port']}/"
             f"{self.config['database']}"
         )
 
-        df = (
+        return (
             self.spark.read
             .format("jdbc")
             .option("url", jdbc_url)
@@ -38,7 +30,3 @@ class MySQLExtractor:
             .option("password", self.config["password"])
             .load()
         )
-
-        logger.info("Successfully read %d records", df.count())
-
-        return df

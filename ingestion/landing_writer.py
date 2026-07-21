@@ -1,5 +1,4 @@
 from datetime import datetime
-from pathlib import Path
 
 from pyspark.sql import DataFrame
 
@@ -11,32 +10,23 @@ logger = get_logger(__name__)
 
 
 class LandingWriter:
-    """
-    Writes raw data into the Landing layer.
-    """
 
     def write(
         self,
         df: DataFrame,
         source: str,
         dataset: str,
-        mode: str = "append",
-    ) -> Path:
+    ) -> str:
         """
-        Writes a DataFrame to the Landing layer.
-
-        Directory layout:
+        Writes a dataframe to the landing layer.
 
         storage/
             landing/
                 mysql/
                     customers/
                         ingestion_date=2026-07-20/
-                csv/
-                    customers/
-                        ingestion_date=2026-07-20/
                 kafka/
-                    claims/
+                    customers/
                         ingestion_date=2026-07-20/
         """
 
@@ -49,7 +39,7 @@ class LandingWriter:
         )
 
         logger.info(
-            "Writing dataset '%s' from source '%s' to '%s'",
+            "Writing dataset '%s' from '%s' to %s",
             dataset,
             source,
             output_path,
@@ -57,15 +47,12 @@ class LandingWriter:
 
         (
             df.write
-            .mode(mode)
+            .mode("append")
             .format(PARQUET)
             .save(str(output_path))
         )
 
-        logger.info(
-            "Successfully wrote %d records.",
-            df.count(),
-        )
+        logger.info("Landing write completed.")
 
         return output_path
 
