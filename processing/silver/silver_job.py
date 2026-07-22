@@ -10,9 +10,7 @@ from processing.silver.enricher import enrich
 from processing.silver.scd import apply_scd
 
 
-def run(dataset: str):
-
-    spark = get_spark()
+def run(spark, dataset: str):
 
     df = read_bronze(
         spark=spark,

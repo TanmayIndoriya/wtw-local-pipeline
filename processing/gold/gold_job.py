@@ -10,9 +10,8 @@ from processing.gold.payment_metrics import build as build_payment_metrics
 from common.logger import get_logger
 
 
-def run():
+def run(spark):
 
-    spark = get_spark()
     logger = get_logger(__name__)
 
     logger.info("Generating customer summary")

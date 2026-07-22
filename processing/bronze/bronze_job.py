@@ -17,9 +17,7 @@ SOURCES = [
 
 logger = get_logger(__name__)
 
-def run(dataset: str) -> None:
-
-    spark = get_spark()
+def run(spark, dataset: str) -> None:
 
     try:
         dataframes = []
