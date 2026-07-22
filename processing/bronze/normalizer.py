@@ -17,9 +17,6 @@ def normalize(
     dataset: str,
     source: str,
 ) -> DataFrame:
-    """
-    Normalize a Landing dataframe into the canonical Bronze schema.
-    """
 
     source = source.lower()
 

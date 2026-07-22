@@ -43,3 +43,16 @@ def write_gold(
         .mode(mode)
         .parquet(str(path))
     )
+
+def write_quarantine(
+    df: DataFrame,
+    dataset: str,
+) -> None:
+
+    path = get_dataset_path("quarantine", dataset)
+
+    (
+        df.write
+        .mode("append")
+        .parquet(str(path))
+    )
