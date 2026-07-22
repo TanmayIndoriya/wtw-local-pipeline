@@ -18,9 +18,6 @@ SOURCES = [
 logger = get_logger(__name__)
 
 def run(dataset: str) -> None:
-    """
-    Build the Bronze dataset by merging all Landing sources.
-    """
 
     spark = get_spark()
 
