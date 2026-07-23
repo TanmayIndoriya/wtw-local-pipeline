@@ -43,9 +43,12 @@ services:
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
 
   airflow-init:
-    image: apache/airflow:2.10.5
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     container_name: airflow-init
-
     user: "${AIRFLOW_UID:-50000}:0"
 
     depends_on:
@@ -56,14 +59,15 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres:5432/airflow
+      PYTHONPATH: /opt/project
+
+    working_dir: /opt/project
 
     volumes:
       - ../../:/opt/project
-      - ../../airflow/dags:/opt/airflow/dags
-      - airflow_logs:/opt/airflow/logs
+      - ../../orchestration/dags:/opt/airflow/dags
       - ../../plugins:/opt/airflow/plugins
-
-    working_dir: /opt/project
+      - airflow_logs:/opt/airflow/logs
 
     command: >
       bash -c "
@@ -74,15 +78,18 @@ services:
       --firstname Admin
       --lastname User
       --role Admin
-      --email admin@example.com
+      --email admin@example.com ||
+      true
       "
 
   airflow-webserver:
-    image: apache/airflow:2.10.5
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     container_name: airflow-webserver
-
     restart: unless-stopped
-
     user: "${AIRFLOW_UID:-50000}:0"
 
     depends_on:
@@ -93,14 +100,15 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres:5432/airflow
+      PYTHONPATH: /opt/project
+
+    working_dir: /opt/project
 
     volumes:
       - ../../:/opt/project
-      - ../../airflow/dags:/opt/airflow/dags
-      - airflow_logs:/opt/airflow/logs
+      - ../../orchestration/dags:/opt/airflow/dags
       - ../../plugins:/opt/airflow/plugins
-
-    working_dir: /opt/project
+      - airflow_logs:/opt/airflow/logs
 
     command: webserver
 
@@ -108,11 +116,13 @@ services:
       - "8080:8080"
 
   airflow-scheduler:
-    image: apache/airflow:2.10.5
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     container_name: airflow-scheduler
-
     restart: unless-stopped
-
     user: "${AIRFLOW_UID:-50000}:0"
 
     depends_on:
@@ -123,14 +133,15 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres:5432/airflow
+      PYTHONPATH: /opt/project
+
+    working_dir: /opt/project
 
     volumes:
       - ../../:/opt/project
-      - ../../airflow/dags:/opt/airflow/dags
-      - airflow_logs:/opt/airflow/logs
+      - ../../orchestration/dags:/opt/airflow/dags
       - ../../plugins:/opt/airflow/plugins
-
-    working_dir: /opt/project
+      - airflow_logs:/opt/airflow/logs
 
     command: scheduler
 
