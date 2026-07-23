@@ -20,6 +20,9 @@ class MySQLExtractor:
             f"{self.config['database']}"
         )
 
+        logger.info(f"JDBC URL: {jdbc_url}")
+        logger.info(f"User: {self.config['username']}")
+
         return (
             self.spark.read
             .format("jdbc")

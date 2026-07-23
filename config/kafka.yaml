@@ -1,6 +1,6 @@
 kafka:
   bootstrap_servers:
-    - localhost:9092
+    - kafka:9092
 
   consumer_group: data-platform
 
@@ -9,5 +9,5 @@ kafka:
   topics:
     customers: customers
     products: products
-    orders: orders
+    orders: orders  
     payments: payments
