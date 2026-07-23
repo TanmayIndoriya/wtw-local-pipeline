@@ -157,6 +157,7 @@ def apply_scd(
             col("e.state"),
             col("e.registration_date"),
             col("e._ingestion_timestamp"),
+            col("e.customer_age"),
             col("e._batch_id"),
             col("e._source_system"),
             col("e._source_file"),

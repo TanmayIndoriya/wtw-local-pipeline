@@ -1,5 +1,3 @@
-from common.spark import get_spark
-
 from processing.common.reader import read_bronze, read_silver
 from processing.common.writer import write_silver, write_quarantine
 
@@ -8,6 +6,8 @@ from processing.silver.validator import validate
 from processing.silver.deduplicator import deduplicate
 from processing.silver.enricher import enrich
 from processing.silver.scd import apply_scd
+
+from pyspark import StorageLevel
 
 
 def run(spark, dataset: str):
@@ -55,6 +55,11 @@ def run(spark, dataset: str):
             incoming_df=valid_df,
             current_df=current_df,
         )
+
+    valid_df = valid_df.persist(StorageLevel.MEMORY_AND_DISK)
+    valid_df.count()      # Force evaluation
+
+    write_silver(valid_df, dataset)
 
     write_silver(
         valid_df,
