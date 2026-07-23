@@ -153,3 +153,28 @@ HASH_ALGORITHM = "sha256"
 # ==========================================================
 
 LOGGER_NAME = "data-platform"
+
+# ==========================================================
+# Datasets
+# ==========================================================
+
+DATASETS = [
+    "customers",
+    "policies",
+    "claims",
+    "payments",
+]
+
+MYSQL_TABLES = {
+    "customers": "customers",
+    "policies": "policies",
+    "claims": "claims",
+    "payments": "payments",
+}
+
+KAFKA_TOPICS = [
+    "customers",
+    "policies",
+    "claims",
+    "payments",
+]

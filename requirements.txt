@@ -17,7 +17,6 @@ kafka-python>=2.2.15
 # Databases
 mysql-connector-python>=9.4.0
 psycopg2-binary>=2.9.10
-SQLAlchemy>=2.0.41
 
 # Airflow (only if running locally, not inside Docker)
 # apache-airflow==3.0.6
