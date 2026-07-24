@@ -17,13 +17,13 @@ SOURCES = [
 
 logger = get_logger(__name__)
 
+
 def run(spark, dataset: str) -> None:
 
-    try:
-        dataframes = []
+    dataframes = []
 
-        for source in SOURCES:
-
+    for source in SOURCES:
+        try:
             df = read_landing(
                 spark=spark,
                 source=source,
@@ -33,17 +33,23 @@ def run(spark, dataset: str) -> None:
             df = normalize(
                 df=df,
                 dataset=dataset,
-                source=source
+                source=source,
             )
 
             dataframes.append(df)
+            logger.info(f"Loaded {source} data for {dataset}")
 
-        bronze_df = merge(dataframes)
+        except Exception as e:
+            logger.warning(f"Skipping {source} for {dataset}: {e}")
 
-        write_bronze(
-            df=bronze_df,
-            dataset=dataset,
-        )
+    if not dataframes:
+        raise RuntimeError(f"No landing data found for dataset '{dataset}'.")
 
-    except Exception as e:
-        logger.warn(e)
+    bronze_df = merge(dataframes)
+
+    write_bronze(
+        df=bronze_df,
+        dataset=dataset,
+    )
+
+    logger.info(f"Bronze dataset '{dataset}' written successfully.")
