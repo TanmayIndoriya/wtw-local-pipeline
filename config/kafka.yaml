@@ -8,6 +8,6 @@ kafka:
 
   topics:
     customers: customers
-    products: products
-    orders: orders  
+    policies: policies
+    claims: claims
     payments: payments
