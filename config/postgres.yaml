@@ -5,6 +5,6 @@ postgres:
   database: airflow
 
   username: postgres
-  password: postgres
+  password: "placeholder"
 
   driver: org.postgresql.Driver
