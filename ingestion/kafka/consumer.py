@@ -21,7 +21,6 @@ class KafkaConsumerClient:
     def consume(
         self,
         topic: str,
-        max_records: int = 1000,
         timeout_ms: int = 5000,
     ) -> list[dict]:
 
@@ -36,7 +35,7 @@ class KafkaConsumerClient:
 
         records = []
 
-        while len(records) < max_records:
+        while True:
 
             batches = consumer.poll(timeout_ms=timeout_ms)
 
@@ -49,8 +48,6 @@ class KafkaConsumerClient:
 
                     records.append(message.value)
 
-                    if len(records) >= max_records:
-                        break
 
         consumer.close()
 
