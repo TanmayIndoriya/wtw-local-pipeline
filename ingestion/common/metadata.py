@@ -1,7 +1,3 @@
-"""
-Adds ingestion metadata columns to DataFrames.
-"""
-
 from datetime import datetime
 import uuid
 
@@ -14,15 +10,6 @@ def add_metadata(
     source: str,
     source_file: str | None = None,
 ) -> DataFrame:
-    """
-    Adds ingestion metadata columns.
-
-    Columns added:
-    - _ingestion_timestamp
-    - _batch_id
-    - _source_system
-    - _source_file
-    """
 
     batch_id = str(uuid.uuid4())
 

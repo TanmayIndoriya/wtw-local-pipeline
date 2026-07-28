@@ -13,9 +13,6 @@ def deduplicate(
     df: DataFrame,
     dataset: str,
 ) -> DataFrame:
-    """
-    Remove duplicate records.
-    """
 
     return df.dropDuplicates(
         PRIMARY_KEYS[dataset]

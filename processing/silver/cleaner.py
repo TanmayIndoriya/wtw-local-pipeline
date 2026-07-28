@@ -4,13 +4,6 @@ from pyspark.sql.types import StringType
 
 
 def clean(df: DataFrame) -> DataFrame:
-    """
-    Standardize dataframe values.
-
-    - Trim whitespace
-    - Convert empty strings to NULL
-    - Uppercase string values
-    """
 
     for field in df.schema.fields:
 

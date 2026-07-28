@@ -30,5 +30,4 @@ with DAG(
         python_callable=ingest_kafka,
     )
 
-    # Run both independently
     [mysql_ingestion, kafka_ingestion]

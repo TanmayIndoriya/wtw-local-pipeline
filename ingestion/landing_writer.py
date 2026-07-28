@@ -17,18 +17,6 @@ class LandingWriter:
         source: str,
         dataset: str,
     ) -> str:
-        """
-        Writes a dataframe to the landing layer.
-
-        storage/
-            landing/
-                mysql/
-                    customers/
-                        ingestion_date=2026-07-20/
-                kafka/
-                    customers/
-                        ingestion_date=2026-07-20/
-        """
 
         partition = datetime.now().strftime("%Y-%m-%d")
 

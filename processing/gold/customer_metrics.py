@@ -23,10 +23,6 @@ def build(spark) -> DataFrame:
 
     payments = read_silver(spark, "payments")
 
-    # -------------------------------------------------
-    # Policy metrics per customer
-    # -------------------------------------------------
-
     policy_metrics = (
         policies
         .groupBy("customer_id")
@@ -40,10 +36,6 @@ def build(spark) -> DataFrame:
             ).alias("active_policies"),
         )
     )
-
-    # -------------------------------------------------
-    # Claim metrics per customer
-    # -------------------------------------------------
 
     claim_metrics = (
         policies
@@ -76,10 +68,6 @@ def build(spark) -> DataFrame:
             ).alias("total_claim_amount"),
         )
     )
-
-    # -------------------------------------------------
-    # Payment metrics per customer
-    # -------------------------------------------------
 
     payment_metrics = (
         policies

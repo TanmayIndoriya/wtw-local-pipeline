@@ -6,10 +6,7 @@ def validate(
     df: DataFrame,
     dataset: str,
 ) -> tuple[DataFrame, DataFrame]:
-    """
-    Split dataframe into valid and invalid records.
-    """
-
+    
     if dataset == "customers":
 
         valid = df.filter(

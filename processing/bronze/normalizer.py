@@ -20,7 +20,6 @@ def normalize(
 
     source = source.lower()
 
-    # CSV files arrive without ingestion metadata.
     if source == "csv":
 
         df = (
@@ -31,8 +30,6 @@ def normalize(
             .withColumn("_source_file", lit(f"{dataset}.csv"))
         )
 
-    # Kafka landing contains transport metadata which is
-    # not required beyond Landing.
     elif source == "kafka":
 
         for column in KAFKA_COLUMNS:

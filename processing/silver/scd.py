@@ -25,13 +25,9 @@ def apply_scd(
     incoming_df: DataFrame,
     current_df: DataFrame | None,
 ) -> DataFrame:
-    """
-    Apply SCD Type 2 for Customers.
-    """
 
     now = current_timestamp()
 
-    # First load
     if current_df is None:
 
         return (
@@ -55,10 +51,7 @@ def apply_scd(
         "left",
     )
 
-    # -----------------------------
-    # Detect Type 2 changes
-    # -----------------------------
-
+    
     change_condition = None
 
     for c in TRACKED_COLUMNS:
@@ -70,10 +63,6 @@ def apply_scd(
         else:
             change_condition |= cond
 
-    # -----------------------------
-    # Brand new customers
-    # -----------------------------
-
     new_customers = (
         joined
         .filter(col("existing.customer_id").isNull())
@@ -84,9 +73,6 @@ def apply_scd(
         .withColumn("version", lit(1))
     )
 
-    # -----------------------------
-    # Customers needing new version
-    # -----------------------------
 
     changed = joined.filter(change_condition)
 
@@ -106,19 +92,11 @@ def apply_scd(
         .withColumn("version", col("version") + 1)
     )
 
-    # -----------------------------
-    # Unchanged rows
-    # -----------------------------
-
     unchanged = (
         joined
         .filter(~change_condition & col("existing.customer_id").isNotNull())
         .select("existing.*")
     )
-
-    # -----------------------------
-    # Type 1 updates
-    # -----------------------------
 
     type1 = (
         unchanged
@@ -134,7 +112,6 @@ def apply_scd(
         .withColumnRenamed("email", "tmp")
     )
 
-    # Replace email & phone with latest values
     type1 = (
         unchanged.alias("e")
         .join(
